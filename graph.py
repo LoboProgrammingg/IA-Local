@@ -30,6 +30,11 @@ def build_first_queries(state: ReportState):
     return {"queries": result.queries}
 
 
+def spawn_researchers(state: ReportState):
+    return [Send('single_search', query)
+            for query in state.queries]
+
+
 def single_search(query: str):
     query = results.queries[0]
     tavily_client = TavilyClient()
@@ -44,6 +49,15 @@ def single_search(query: str):
     
     if len(url_extraction["results"]) > 0:
         raw_content = url_extraction["results"][0]["raw_content"]
+        prompt = resume_search.format(user_input=user_input,
+                                      search_results=raw_content)
+        llm_result = llm.invoke(prompt)
+        
+        query_results = QueryResult(title=results["results"][0]["title"],
+                                    url=url,
+                                    resume=llm_result.content)
+
+    return {'query_results': [query_results]}
 
 
 
