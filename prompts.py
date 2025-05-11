@@ -34,3 +34,18 @@ Here's the web search results:
 {web_search_results}
 </WEB_SEARCH_RESULTS>
 """
+
+build_final_response = agent_prompt + """
+Your objective here is develop a final response to the user using
+the reports made during the web search, with their synthesis.
+
+THe response should contain something between 500 - 800 words.
+
+Here's the web search results:
+<SEARCH_RESULTS>
+{search_results}
+</SEARCH_RESULTS>
+
+You must add reference citations (with the number of the citation, example: [1]) for the
+articles you used in each paragraph of your answer.
+"""
